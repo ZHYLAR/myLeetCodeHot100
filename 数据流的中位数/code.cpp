@@ -14,13 +14,11 @@
  */
 class MedianFinder {
 public:
-    priority_queue<int, vector<int>, less<int>> queMin;
-    priority_queue<int, vector<int>, greater<int>> queMax;
-
-    /**
-     * 构造函数：初始化两个空优先队列
-     */
-    MedianFinder() {}
+    // priority_queue<int, vector<int>, less<int>> queMin;
+    priority_queue<int> queMin;//大顶堆，存储较小的那一半数据
+    priority_queue<int, vector<int>, greater<int>> queMax;//小顶堆，存储较大的那一半数据
+    
+    // MedianFinder() {}
 
     /**
      * 添加一个数字到数据流中，并维护两个堆的平衡
@@ -32,6 +30,7 @@ public:
         if (queMin.empty() || num <= queMin.top()) {
             queMin.push(num);
             // 维护堆的平衡：如果queMin比queMax大超过1个元素，则将queMin的堆顶移到queMax
+            //queMax.size() + 2 == queMin.size()
             if (queMax.size() + 1 < queMin.size()) {
                 queMax.push(queMin.top());
                 queMin.pop();
@@ -57,6 +56,15 @@ public:
         }
         // 否则，中位数是两个堆顶的平均值
         return (queMin.top() + queMax.top()) / 2.0;
+
+        //another version
+        // const int n = queMin.size() + queMax.size();
+        // if(n & 1)
+        // {
+        //     return queMin.top();
+        // }
+
+        // return (queMin.top() + queMax.top()) / 2.0;
     }
 };
 
@@ -67,3 +75,52 @@ public:
  * 
  * 空间复杂度：O(n)，需要存储所有已添加的元素
  */
+
+// 另一个对称的版本
+// class MedianFinder {
+// private:
+//     priority_queue<int, vector<int>, greater<int>> maxQ; //小顶堆
+//     priority_queue<int> minQ;//大顶堆
+
+// public:
+//     // MedianFinder() {
+
+//     // }
+    
+//     void addNum(int num) {
+//         if(maxQ.empty() || num >= maxQ.top())
+//         {
+//             maxQ.push(num);
+
+//             if(minQ.size() + 2 == maxQ.size())
+//             {
+//                 minQ.push(maxQ.top());
+//                 maxQ.pop();
+//             }
+//         }
+//         else 
+//         {
+//             minQ.push(num);
+
+//             if(minQ.size() > maxQ.size())
+//             {
+//                 maxQ.push(minQ.top());
+//                 minQ.pop();
+//             }
+//         }
+        
+//     }
+    
+//     double findMedian() {
+//         const int n = maxQ.size() + minQ.size();
+//         if(n&1)
+//         {
+//             return maxQ.top();
+//         }
+    
+//         return (maxQ.top() + minQ.top()) / 2.0;
+
+//     }
+// };
+
+
